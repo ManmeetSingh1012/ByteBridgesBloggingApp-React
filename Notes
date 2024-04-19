@@ -1,0 +1,14 @@
+installed react-toolkit , react-redux , react-router-dom : for routeing , appwrite , tinymce  : for text editor 
+react hook form : form submission , html react parser 
+
+
+.env creating it is diffenrent in diffrent for react ,vite basically dependens on how u create a app
+and to use it is diffenrent as well
+
+
+
+1 - Home work : use classes , interface , objects as parameter passing , genrics , modify the code with typescript work 
+
+2 - Home work : Read About forward ref , file structure , react redux - redux toolkit , router , hook form; 
+
+3 - Home work : see formik and yup for form submission better than hook -form .
