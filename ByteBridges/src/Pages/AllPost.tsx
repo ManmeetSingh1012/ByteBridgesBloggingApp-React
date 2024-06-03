@@ -8,7 +8,7 @@ export default function AllPost()
 {
 
    const [posts, setPosts] = useState<any[]>([]);
-   const data:any = useSelector((state: RootState) => state.userData);
+   const data:any = useSelector((state: RootState) => state.persistedReducer.acesstoken);
 
    useEffect(() => { }, []);
 

@@ -13,7 +13,9 @@ import AllPost from './Pages/AllPost.tsx'
 import AddPost from './Pages/AddPost.tsx'
 import EditPost from './Pages/EditPost.tsx'
 import Post from './Pages/Post.tsx'
-
+import { persistor  } from './ReduxStore/store.ts'
+import { PersistGate } from 'redux-persist/integration/react';
+import Profile from './Pages/Profile.tsx'
 
 const router = createBrowserRouter([
   {
@@ -40,6 +42,15 @@ const router = createBrowserRouter([
                 </AuthLayout>
             ),
         },
+        {
+            path: "/profile",
+            element: (
+                <AuthLayout authentication>
+                    <Profile />
+                </AuthLayout>
+            ),
+        },
+
         {
             path: "/all-posts",
             element: (
@@ -78,6 +89,9 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
-  <RouterProvider router={router}/>
+    <PersistGate loading={null} persistor={persistor}>
+    <RouterProvider router={router}/>
+      </PersistGate>
+  
   </Provider>,
 )

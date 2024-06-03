@@ -12,7 +12,7 @@ export default function Header() {
 
   // we are getting status from the store , if the user is there then the navigation will changed
   // bec nav depends on acitve status , and active status get change when the user is logged in or gets logged out
-    const authStatus = useSelector((state:RootState) => state.status);
+    const authStatus = useSelector((state:RootState) => state.persistedReducer.status);
 
     const navigate = useNavigate();
 
@@ -32,24 +32,23 @@ export default function Header() {
         slug: "/signup",
         active: !authStatus,
     },
+   
     {
-        name: "All Posts",
-        slug: "/all-posts",
-        active: authStatus,
-    },
-    {
-        name: "Add Post",
-        slug: "/add-post",
-        active: authStatus,
-    },
+      name: "Profile",
+      slug: "/profile",
+      active: authStatus,
+  }
     ]
 
 
     
    return (
       <header className='py-3 shadow bg-white text-[#31363F] w-full'>
-      <Container>
-        <nav className='flex'>
+      <Container >
+
+
+      
+        <nav className='flex w-5/6 mx-auto'>
           <div className='mx-5 py-2 flex flex-row' >
             <Link to='/'>
 

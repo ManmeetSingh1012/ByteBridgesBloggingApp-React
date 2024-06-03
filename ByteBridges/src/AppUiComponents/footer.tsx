@@ -41,22 +41,7 @@ function Footer() {
                                         Pricing
                                     </Link>
                                 </li>
-                                <li className="mb-4">
-                                    <Link
-                                        className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                                        to="/"
-                                    >
-                                        Affiliate Program
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                                        to="/"
-                                    >
-                                        Press Kit
-                                    </Link>
-                                </li>
+                                
                             </ul>
                         </div>
                     </div>
@@ -74,14 +59,7 @@ function Footer() {
                                         Account
                                     </Link>
                                 </li>
-                                <li className="mb-4">
-                                    <Link
-                                        className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                                        to="/"
-                                    >
-                                        Help
-                                    </Link>
-                                </li>
+                               
                                 <li className="mb-4">
                                     <Link
                                         className=" text-base font-medium text-gray-900 hover:text-gray-700"
@@ -90,14 +68,7 @@ function Footer() {
                                         Contact Us
                                     </Link>
                                 </li>
-                                <li>
-                                    <Link
-                                        className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                                        to="/"
-                                    >
-                                        Customer Support
-                                    </Link>
-                                </li>
+                               
                             </ul>
                         </div>
                     </div>
@@ -123,14 +94,7 @@ function Footer() {
                                         Privacy Policy
                                     </Link>
                                 </li>
-                                <li>
-                                    <Link
-                                        className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                                        to="/"
-                                    >
-                                        Licensing
-                                    </Link>
-                                </li>
+                                
                             </ul>
                         </div>
                     </div>

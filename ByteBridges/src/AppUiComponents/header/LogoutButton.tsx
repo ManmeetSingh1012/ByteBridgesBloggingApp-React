@@ -1,8 +1,7 @@
 
 import { useDispatch } from 'react-redux';
 import authservice from '@/AppWriteServices/auth';
-import { Logout } from '@/ReduxStore/authslice';
-
+import { removeUser } from '@/ReduxStore/authslice';
 
 
 export default function LogoutButton()
@@ -11,9 +10,8 @@ export default function LogoutButton()
    const dispatch = useDispatch();
 
    const logouthandler = ()=>{
-      authservice.logout().then(() =>{
-         dispatch(Logout())
-      })
+      dispatch(removeUser())
+      
    }
    return(
       <button

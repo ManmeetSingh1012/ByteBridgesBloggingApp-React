@@ -11,7 +11,7 @@ export default function AuthLayout({children,authentication = true} :{
    const navigate = useNavigate();
    const [loader,setLoader] = useState(true);
    // root state is the type of the state of the redux store
-   const authStatus = useSelector((state:RootState) => state.status);
+   const authStatus = useSelector((state:RootState) => state.persistedReducer.status);
 
    useEffect
    (() => {

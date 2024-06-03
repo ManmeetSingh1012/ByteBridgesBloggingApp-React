@@ -20,14 +20,14 @@ export class Service{
    
    }
 
-   async createpost({title, slug, content ,  featuredimage , status , userId}:
-      {title : string , slug : string , content : string , featuredimage : string , status : string , userId : string})
+   async createpost({title, slug, content ,  featuredvedio , status , userId}:
+      {title : string , slug : string , content : string , featuredvedio : string , status : string , userId : string})
    {
       try{
          return await this.databases.createDocument(conf.appwriteDatabaseId,conf.appwriteCollectionId,slug,{
             title,
             content,
-            featuredimage,
+            featuredvedio,
             status,
             userId
 
@@ -41,14 +41,14 @@ export class Service{
    
 
 
-   async updatepost( slug:string , {title,  content ,  featuredimage , status, userId }:
-      {title : string , content : string , featuredimage : string , status : string , userId: string})
+   async updatepost( slug:string , {title,  content ,  featuredvedio , status, userId }:
+      {title : string , content : string , featuredvedio : string , status : string , userId: string})
    {
       try{
          return await this.databases.updateDocument(conf.appwriteDatabaseId,conf.appwriteCollectionId,slug,{
             title,
             content,
-            featuredimage,
+            featuredvedio,
             status,
             userId
             

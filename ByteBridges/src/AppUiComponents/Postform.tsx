@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import {Button} from '../components/ui/button';
 import {Input} from '../components/ui/input';
 import service  from '@/AppWriteServices/config';
@@ -11,112 +11,151 @@ import { useCallback , useEffect, useRef} from "react";
 import { ID, Models } from "appwrite";
 import { ReactNode } from "react";
 import Select from "./select";
+import { useState } from "react";
+
+import axios from "axios";
 // this is the interface to add post using rte editor
 
 interface Posts {
+    _id:string,
    title:string,
    content:string,
-   $id:string,
-   status:string,
-   featuredimage :string
+    topics:string,
+    image:string,
 }
 
 
 
 // we have passed here null it wont work ok .
 export default function PostForm({ post } : {post :Posts | null}) {
-   const { register, handleSubmit, watch, setValue, control, getValues } = useForm({
+   const { register, handleSubmit, watch, setValue, control, getValues ,formState: { errors } } = useForm({
        defaultValues: {
            title: post?.title || "",
-           slug: post?.$id || "",
+           topics: post?.topics || "",
            content: post?.content || "",
-           status: post?.status || "active",
-           featuredimage : post?.featuredimage || ""
+           
+           image :  ""
        },
    });
 
+
+   
+   const [error,seterror] = useState("")
+   const formdata = new FormData()
+
+    const [loading,setloading] = useState(false)
+
    const navigate = useNavigate();
- const userData :any = useSelector((state:RootState) => state.userData);
+   const acesstoken = useSelector( (State:RootState)=> State.persistedReducer.acesstoken)
+   console.log(acesstoken)
 
    const submission = async (data:any) => {
     console.log(data);
     
        if (post != null) {
-           /*const file = data.featuredimage[0] ? await service.uploadfile(data.featuredimage[0]) : null;
+        data.image = data.image[0]
+        formdata.append("title",data.title)
+        formdata.append("topics",data.topics)
+        formdata.append("content",data.content)
+        formdata.append("coverimage",data.image)
 
-           if (file) {
-            service.deletefile(post.featuredimage);
-           }*/
 
-           const dbPost = await service.updatepost(post.$id, {
-               ...data,
-               userId : userData.$id
-           });
+        console.log(formdata)
 
-           if (dbPost) {
-               navigate(`/post/${dbPost.$id}`);
-           }
-       } else {
-           const file = await service.uploadfile(data.featuredimage[0]);
-
-           if (file) {
-               const fileId = file.$id;
-               data.featuredimage = fileId;
-
-               console.log("id:",userData.$id)
-               console.log("id:",userData)
-
-               if(userData.$id != null)
-               {
-
-                console.log("id:",userData.$id)
-                const dbPost = await service.createpost({ ...data,  userId : userData.$id  });
-
-                if (dbPost) {
-                    navigate(`/post/${dbPost.$id}`);
-                }
-               }else{
-                console.log("user id not found")
-               }
+        setloading(true)
+        
+      
+               try{
+                  await axios.put(`http://localhost:4000/api/v1/blog/editblog/${post._id}`,formdata,{headers:{Authorization:`Bearer ${acesstoken}`}}).
+                  then((response)=>{
+                     console.log(response.data.data)
+                        navigate("/profile")
+                     
+                     
+      
+                  }).catch((error)=>{
+      
+                     console.log(error)
+                     seterror(error.message)
+      
+                  }).finally(()=>{
+                     setloading(false)
+                  })
+      
+               }catch(error){
+                  console.log(error)
+                  seterror("something went wrong")
+                  setloading(false)
+                  
                
-           }
+               }
+      
+            
+      
+            
+
+           console.log("data2",data)
+       } else {
+
+        data.image = data.image[0]
+        formdata.append("title",data.title)
+        formdata.append("topics",data.topics)
+        formdata.append("content",data.content)
+        formdata.append("coverimage",data.image)
+
+
+        console.log(formdata)
+
+        setloading(true)
+        
+      
+               /*try{
+                  await axios.post("http://localhost:4000/api/v1/blog/addblog",formdata,{headers:{Authorization:`Bearer ${acesstoken}`}}).
+                  then((response)=>{
+                     console.log(response.data.data)
+                        navigate("/profile")
+                     
+                     
+      
+                  }).catch((error)=>{
+      
+                     console.log(error)
+                     seterror(error.message)
+      
+                  }).finally(()=>{
+                     setloading(false)
+                  })
+      
+               }catch(error){
+                  console.log(error)
+                  seterror("something went wrong")
+                  setloading(false)
+                  
+               
+               }*/
+      
+            
+      
+            
+         
+
+        
+           
        }
    };
 
-   const slugTransform = useCallback((value:any) => {
-       if (value && typeof value === "string")
-           return value
-               .trim()
-               .toLowerCase()
-               .replace(/[^a-zA-Z\d\s]+/g, "-")
-               .replace(/\s/g, "-");
-
-       return "";
-   }, []);
+   
 
 
 
-   useEffect(() => {
-   }, []);
-
-
-
-   useEffect(() => {
-       const subscription = watch((value, { name }) => {
-           if (name === "title") {
-               setValue("slug", slugTransform(value.title), { shouldValidate: true });
-           }
-       });
-
-       
-
-       // for memory managment : see docs form more info
-       return () => subscription.unsubscribe();
-   }, [watch, slugTransform, setValue]);
+  
 
    return (
 
-    <div className="p-5 ">
+    <div className="p-5 flex flex-col flex-wrap ">
+
+        <span className="text-red-600 text-base">*All fields are requried </span>
+        <span className="text-red-600 text-base">{`${error}`}</span>
 <form onSubmit={handleSubmit(submission)} className="flex flex-wrap">
            <div className="w-2/3 px-2">
                <Input
@@ -127,47 +166,42 @@ export default function PostForm({ post } : {post :Posts | null}) {
                />
                <Input
                  
-                   placeholder="Slug"
+                   placeholder="Topics"
                    className="mb-4"
-                   {...register("slug", { required: true })}
-                   onInput={(e) => {
-                       setValue("slug", slugTransform(e.currentTarget.value), { shouldValidate: true });
-                   }}
+                   {...register("topics", { required: true })}
+                   
                />
 
 <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} />
 
+
 <div className="w-1/3 px-2">
+
+
+{
+    post == null ? (
 <Input
                  
                  type="file"
-                 className="mb-4"
-                 accept="image/png, image/jpg, image/jpeg, image/gif"
-                 {...register( "featuredimage", { required: !post })}
+                 className="mb-4 mt-4"
+                 accept="image/png, image/jpg, image/jpeg, image/gif vedio/mp.4"
+                 {...register( "image", { required: true })}
              />
-             {post!=null && (
-                 <div className="w-full mb-4">
-                     <img
-                         src={String(service.getfilePreview(post.featuredimage))}
-                         alt={post.title}
-                         className="rounded-lg"
-                     />
-                 </div>
-             )}
-             <Select
-                 options={["active", "inactive"]}
-                 label="Status"
-                 className="mb-4"
-                 {...register("status", { required: true })}
-             />
+             
+             
                
-           </div>
+           
+    ): null
+}
+   
+
+</div>
 
 
 
 
-
-<Button type="submit"  variant={post ? "default" : undefined} className="w-full inline-block px-6 py-2 duration-200 bg-[#5755FE] text-white  rounded-full font-medium font-sans text-base">
+<Button type="submit"  variant={post ? "default" : undefined} className="w-2/3 mx-auto inline-block px-6 py-2 
+duration-200 bg-[#5755FE] text-white  rounded-full font-medium font-sans text-base">
                    {post ? "Update" : "Submit"}
                </Button>
               
